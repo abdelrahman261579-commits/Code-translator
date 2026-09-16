@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مترجم الأكواد</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0e1116;
+    color: #e8ecf4;
+    font-family: -apple-system, 'Segoe UI', Tahoma, Arial, sans-serif;
+    padding: 15px;
+    min-height: 100vh;
+    direction: rtl;
+  }
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    background: #151a22;
+    border: 1px solid #232b38;
+    border-radius: 14px;
+    padding: 20px;
+  }
+  h1 {
+    font-family: Georgia, serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: #e8ecf4;
+    margin-bottom: 10px;
+  }
+  .subtitle {
+    color: #9aa5b8;
+    font-size: 13px;
+    margin-bottom: 18px;
+    line-height: 1.6;
+  }
+  label {
+    display: block;
+    font-size: 13px;
+    color: #6b7688;
+    margin-bottom: 6px;
+  }
+  textarea {
+    width: 100%;
+    min-height: 120px;
+    background: #0e1116;
+    border: 1px solid #232b38;
+    border-radius: 10px;
+    color: #e8ecf4;
+    font-family: monospace;
+    font-size: 14px;
+    padding: 12px;
+    resize: vertical;
+    line-height: 1.6;
+    direction: ltr;
+    text-align: left;
+  }
+  textarea:focus { outline: none; border-color: #3d5aff; }
+  .lang-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .lang-field { flex: 1; }
+  .lang-arrow { color: #6b7688; font-size: 18px; padding-bottom: 8px; }
+  select {
+    width: 100%;
+    background: #0e1116;
+    border: 1px solid #232b38;
+    border-radius: 8px;
+    color: #e8ecf4;
+    font-size: 14px;
+    padding: 10px;
+  }
+  select:focus { outline: none; border-color: #3d5aff; }
+  button {
+    background: #3d5aff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 24px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 16px;
+    width: 100%;
+  }
+  button:disabled { background: #23305c; color: #6b7688; }
+  .status { font-size: 13px; color: #6b7688; margin-top: 10px; text-align: center; }
+  .output-wrap {
+    margin-top: 18px;
+    border: 1px solid #232b38;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #0e1116;
+  }
+  .output-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    border-bottom: 1px solid #232b38;
+    font-family: monospace;
+    font-size: 12px;
+    color: #6b7688;
+  }
+  .copy-btn {
+    background: transparent;
+    color: #6b7688;
+    border: 1px solid #232b38;
+    padding: 4px 10px;
+    font-size: 12px;
+    border-radius: 6px;
+    width: auto;
+    margin: 0;
+  }
+  pre {
+    margin: 0;
+    padding: 14px;
+    font-family: monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #d7e0f0;
+    overflow-x: auto;
+    direction: ltr;
+    text-align: left;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    min-height: 80px;
+  }
+  .error-box {
+    margin-top: 14px;
+    padding: 12px;
+    border-radius: 8px;
+    background: rgba(255,107,107,0.08);
+    border: 1px solid rgba(255,107,107,0.3);
+    color: #ff6b6b;
+    font-size: 13px;
+    display: none;
+  }
+  .error-box.visible { display: block; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>مترجم الأكواد</h1>
+  <p class="subtitle">الصق كود بأي لغة برمجة، اختار اللغة اللي عايز تتحول ليها، وهو يحوّله لك.</p>
+
+  <label for="input-code">الكود اللي عايز تحوّله</label>
+  <textarea id="input-code" placeholder="مثال:&#10;print('hello')"></textarea>
+
+  <div class="lang-row">
+    <div class="lang-field">
+      <label for="source-lang">من</label>
+      <select id="source-lang">
+        <option value="auto">كشف تلقائي</option>
+        <option value="Python">Python</option>
+        <option value="JavaScript">JavaScript</option>
+        <option value="TypeScript">TypeScript</option>
+        <option value="Lua">Lua</option>
+        <option value="C">C</option>
+        <option value="C++">C++</option>
+        <option value="C#">C#</option>
+        <option value="Java">Java</option>
+        <option value="Go">Go</option>
+        <option value="Rust">Rust</option>
+        <option value="PHP">PHP</option>
+        <option value="Ruby">Ruby</option>
+        <option value="Swift">Swift</option>
+        <option value="Kotlin">Kotlin</option>
+      </select>
+    </div>
+    <div class="lang-arrow">←</div>
+    <div class="lang-field">
+      <label for="target-lang">إلى</label>
+      <select id="target-lang">
+        <option value="Lua">Lua</option>
+        <option value="Python">Python</option>
+        <option value="JavaScript">JavaScript</option>
+        <option value="TypeScript">TypeScript</option>
+        <option value="C">C</option>
+        <option value="C++">C++</option>
+        <option value="C#">C#</option>
+        <option value="Java">Java</option>
+        <option value="Go">Go</option>
+        <option value="Rust">Rust</option>
+        <option value="PHP">PHP</option>
+        <option value="Ruby">Ruby</option>
+        <option value="Swift">Swift</option>
+        <option value="Kotlin">Kotlin</option>
+      </select>
+    </div>
+  </div>
+
+  <button id="convert-btn">حوّل الكود</button>
+  <div class="status" id="status"></div>
+  <div class="error-box" id="error-box"></div>
+
+  <div class="output-wrap">
+    <div class="output-header">
+      <span>النتيجة</span>
+      <button class="copy-btn" id="copy-btn">نسخ</button>
+    </div>
+    <pre id="output-code">النتيجة هتظهر هنا...</pre>
+  </div>
+</div>
+
+<script>
+// ⚠️ حط المفتاح بتاعك هنا
+const API_KEY = "NVSIed1+b+H+VjP9A/1SUKGV6F+gaOPzKxTsrlyY481d1i05+mtBlzAZqsyeUt1GXgsV0T/oqgDG9kagd9hVrpkmnSgce4kJojrGc1rDqnF0SmsHdDI20h53U19dOS7jQJkFpf/BE35lQPj5OpZbDtvySWw=";
+
+const API_URL = "https://api.llm7.io/v1/chat/completions";
+const MODEL = "default";
+
+const input = document.getElementById('input-code');
+const btn = document.getElementById('convert-btn');
+const status = document.getElementById('status');
+const errorBox = document.getElementById('error-box');
+const outputCode = document.getElementById('output-code');
+const copyBtn = document.getElementById('copy-btn');
+const sourceLang = document.getElementById('source-lang');
+const targetLang = document.getElementById('target-lang');
+
+function showError(msg) {
+  errorBox.textContent = msg;
+  errorBox.classList.add('visible');
+}
+function clearError() {
+  errorBox.textContent = '';
+  errorBox.classList.remove('visible');
+}
+
+async function convert() {
+  const code = input.value.trim();
+  if (!code) {
+    showError('الصق كود الأول.');
+    return;
+  }
+
+  clearError();
+  outputCode.textContent = 'جاري التحويل...';
+  btn.disabled = true;
+  status.textContent = 'جاري التحويل...';
+
+  const src = sourceLang.value === 'auto' ? 'اللغة اللي هو مكتوب بيها' : sourceLang.value;
+  const tgt = targetLang.value;
+
+  try {
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + API_KEY
+      },
+      body: JSON.stringify({
+        model: MODEL,
+        messages: [
+          {
+            role: 'system',
+            content: 'أنت مترجم أكواد. حول الكود من ' + src + ' إلى ' + tgt + '. رد بالكود بس، من غير شرح.'
+          },
+          { role: 'user', content: code }
+        ],
+        temperature: 0.2
+      })
+    });
+
+    if (!response.ok) {
+      const errData = await response.json().catch(() => ({}));
+      throw new Error(errData.error?.message || 'فشل الطلب (كود ' + response.status + ')');
+    }
+
+    const data = await response.json();
+    let result = data.choices?.[0]?.message?.content || '';
+    result = result.replace(/^```[a-zA-Z]*\n?/g, '').replace(/```$/g, '').trim();
+
+    if (!result) throw new Error('الخدمة ما رجعتش كود.');
+
+    outputCode.textContent = result;
+    status.textContent = 'تم التحويل ✓';
+
+  } catch (err) {
+    outputCode.textContent = 'النتيجة هتظهر هنا...';
+    showError(err.message || 'حصل خطأ.');
+    status.textContent = '';
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+copyBtn.addEventListener('click', async () => {
+  const text = outputCode.textContent;
+  if (!text || text === 'النتيجة هتظهر هنا...') return;
+  try {
+    await navigator.clipboard.writeText(text);
+    copyBtn.textContent = 'تم النسخ ✓';
+    setTimeout(() => copyBtn.textContent = 'نسخ', 1500);
+  } catch {
+    showError('تعذر النسخ.');
+  }
+});
+
+btn.addEventListener('click', convert);
+</script>
+
+</body>
+</html>
